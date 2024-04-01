@@ -1,0 +1,77 @@
+description: "User login"
+tags:
+  - name: "Login"
+
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - in: "body"
+    name: "body"
+    description: "User login credentials"
+    required: true
+    schema:
+      $ref: "#/definitions/UserLoginSchema"
+    example:
+      username: john_doe
+      password: senha123
+definitions:
+  UserLoginSchema:
+    type: object
+    properties:
+      username:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
+  AdditionalClaimsSchema:
+    type: object
+    properties:
+      user_id:
+        type: integer
+        required: true
+      username:
+        type: string
+        required: true
+
+  UserAuthenticatedSchema:
+    type: object
+    properties:
+      access_token:
+        type: string
+        required: true
+      additional_claims:
+        $ref: "#/definitions/AdditionalClaimsSchema"
+  ErrorSchema:
+    type: object
+    properties:
+      message:
+        type: string
+        required: true
+responses:
+  200:
+    description: Successful login
+    schema:
+      $ref: "#/definitions/UserAuthenticatedSchema"
+    examples:
+      application/json:
+        access_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3QiLCJleHAiOjE2MTc5OTI2OTQsImlhdCI6MTYxNzk5MjY5NH0.QAJYmGy_2W_5C3r-sQ9XOVzZZ5hTw9v7VltA7l9q5MU"
+        additional_claims:
+          user_id: 1
+          username: "john doe"
+  400:
+    description: "Bad request"
+    schema:
+      $ref: "#/definitions/ErrorSchema"
+    examples:
+      application/json:
+        message: "Campos de usuário e senha são obrigatórios"
+  401:
+    description: "Unauthorized"
+    schema:
+      $ref: "#/definitions/ErrorSchema"
+    examples:
+      application/json:
+        message: "Usuário não encontrado"

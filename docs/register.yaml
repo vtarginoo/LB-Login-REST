@@ -1,0 +1,80 @@
+description: "Register a new user with a username, email, and password"
+tags:
+  - User Registration
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - in: body
+    name: body
+    description: User registration details
+    required: true
+    schema:
+      $ref: "#/definitions/UserSchema"
+definitions:
+  UserSchema:
+    type: object
+    properties:
+      username:
+        type: string
+        description: Username of the new user
+      email:
+        type: string
+        format: email
+        description: Email address of the new user
+      password:
+        type: string
+        description: Password of the new user
+    example:
+      username: john_doe
+      email: john@example.com
+      password: senha123
+
+  UserSchemaView:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ID of the registered user
+      username:
+        type: string
+        description: Username of the registered user
+      email:
+        type: string
+        format: email
+        description: Email address of the registered user
+    example:
+      id: "1"
+      username: john_doe
+      email: john@example.com
+
+  ErrorSchema:
+    type: object
+    properties:
+      message:
+        type: string
+        description: Error message
+    required:
+      - message
+    example:
+      message: "Username, email, and password are required."
+responses:
+  201:
+    description: User successfully registered
+    schema:
+      $ref: "#/definitions/UserSchemaView"
+
+  400:
+    description: Bad request
+    schema:
+      $ref: "#/definitions/ErrorSchema"
+    example:
+      message: "Username, email, and password are required."
+  500:
+    description: Internal Server Error
+    schema:
+      $ref: "#/definitions/ErrorSchema"
+    example:
+      message: "Por algum motivo não conseguimos fazer o cadastro do usuário."
+      statusCode: 500
