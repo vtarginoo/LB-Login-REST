@@ -11,13 +11,17 @@ from schemas import *
 
 from flasgger import Swagger, LazyJSONEncoder,swag_from
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
 
 app = Flask(__name__)
 CORS(app)
-app.config['SECRET_KEY'] = 'f548bc279fdb47da87b07d8911aed425'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 jwt = JWTManager(app)
-# login_manager = LoginManager()
-# login_manager.init_app(app)  # Inicializa o LoginManager com o aplicativo Flask
+
+senha = os.getenv('SECRET_KEY')
 
 
 app.json_encoder = LazyJSONEncoder
